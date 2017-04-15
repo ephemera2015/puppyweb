@@ -1,13 +1,13 @@
 #-*-coding:utf-8-*-
 
-from flask import request,session,g,redirect,url_for,abort,render_template,flash
+from flask import request,session,g,redirect,url_for,abort,render_template,flash#request表示当前用户发来的请求
 from puppy import app
 
-@app.route('/')
+@app.route('/')#注册应该函数index，对'/'请求进行响应，下同,'/'表示的是网站主页
 def index():
-    cur=g.db.execute('select id,title,text from entries order by id desc')
+    cur=g.db.execute('select id,title,text from entries order by id desc')#从数据库获取发布的所有entry，sql语法
     entries=[dict(id=row[0],title=row[1],text=row[2]) for row in cur.fetchall()]
-    return render_template('index.html',entries=entries)
+    return render_template('index.html',entries=entries)#返回应该html文件，这个html文件是index.html模板根据entries填充得到的。
     
 @app.route('/add', methods=['POST'])
 def add_entry():
