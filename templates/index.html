@@ -1,29 +1,76 @@
 {% extends "layout.html" %}
-{% block body %}
+{% block body %}          
+
+{% for entry in entries %}
+<div class="entry">
+    <p class="entry_title">{{ entry.etitle }}</p>
+    <div class="entry_avatar">
+        <img src="/get/image/{{entry.uavatar}}"/>
+    </div>
+    {% for img_name in entry.eimgs %}
+    <input type="text" style="display:none" value="{{img_name}}">
+    {% endfor %}
+    {% if entry.eimgs %}
+    <div class="entry_button"><p>照片</p></div>
+    {% endif %}
+    <div class="entry_content"><p>{{ entry.econtent|safe }}</p></div>
+    <div class="entry_info">
+    <p>{{entry.uname}}</p>
+    <p>{{entry.etimestamp.split('.')[0]}}</p>
+    </div>
+</div>
+{% endfor %}
+
+
+<div id="center">
+    <div id="center_close"><p>关闭</p></div>
+    <div id="entry_imgs" style="display:none">
+        <div id="entry_imgs_next"><p>下一张</p></div>
+        <div id="entry_imgs_previous"><p>上一张</p></div>
+    </div>
+
+    <div class="login_enroll">
+        <ul>
+            <li id="login"><h2>登录</h2></li>
+            <li id="enroll"><h2>注册</h2></li>
+            <li id="login_enroll_msg"></li>
+        </ul>
+        <div class="login">
+             <form id="login_form">
+                <table>
+                <tr><td>用户名:</td><td><input type="text" id="login_name"></td></tr>
+                <tr><td>密码:</td><td><input type="password" id="login_pwd"></td></tr>
+                <tr><td colspan="2"><input type="button" class="button" id="login_ok" value="登录"/></td></tr>
+                </table>
+              </form>
+        </div>
+        <div class="enroll">
+             <form id="enroll_form" enctype="multipart/form-data">
+                  <table>
+                  <tr><td>用户名:</td><td><input type="text" name="name"></td><td rowspan="3"><img id="avatar_preview"></td></tr>
+                  <tr><td>密码:</td><td><input type="password" name="pwd"></td></tr>
+                  <tr><td>头像:</td><td><input id="avatar" name="avatar" type="file" onchange="showPreview(this)"></td></tr>
+                  <tr><td colspan="2"><input type="button" class="button" id="enroll_ok" value="注册"></td></tr>
+                  </table>
+              </form>
+        </div>
+    </div>
   
-  <div class="contents">
-    这里是为目录和导航预留
-  </div>
-  <div class="entries">
-  <ul>
-  {% for entry in entries %}
-  {% if session.logged_in %}
-    <form action="{{ url_for('del_entry') }}" method=post class=del-entry>
-  {% endif %}
-        <li>
-        <h2>{{ entry.title }}</h2>
-        {{ entry.text|safe }}
-        <img src="/image/{{entry.images}}" height="30%" width="30%"/>
-        </li>
-        
-  {% if session.logged_in %}
-        <input type=text name=id value="{{entry.id}}" style="display:none;">
-        <input type=submit value=Delete>
-    </form>
-  {% endif %}
-  {% else %}
-    <li><em>Unbelievable.  No entries here so far</em>
-  {% endfor %}
-  </ul>
-  </div>
+    <div class="add-entry">
+        <div id="add-entry-img-preview">
+        </div>
+        <div>
+        <form id="add-entry-form" enctype=multipart/form-data >
+        <table>
+        <tr><td>标题:</td><td><input type=text size=30 name=title></td></tr>
+        <tr><td>内容:</td><td><textarea name=content rows=5 cols=40></textarea></td></tr>
+        <tr style="display:none"><td><input type="text" name="cnt" id="img_cnt" value="0"></td></tr>
+        <tr><td>上传图片:</td><td><input type="file" onchange="preview(this)" /></td></tr>
+        <tr><td colspan="2"><input type="button" class="button" id="add-entry-ok" value="发布"></td></td>
+        </table>
+        </form>
+        </div>
+</div>
+</div>
+
 {% endblock %}

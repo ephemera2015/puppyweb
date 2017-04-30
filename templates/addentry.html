@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block body %}
+{% if session.logged_in %}
+<form action="{{ url_for('add_entry') }}" method=post enctype=multipart/form-data class=add-entry>
+    <dl>
+    <dt>标题:
+    <dd><input type=text size=30 name=title>
+    <dt>内容:
+    <dd><textarea name=content rows=5 cols=40></textarea>
+    <dt>上传图片：
+    <input type="file" name="images" onchange="preview(this)" multipart/>
+    <script type="text/javascript">
+        function preview(file) 
+        {
+            div=document.getElementById('preview');
+            if (file.files && file.files[0])
+            {
+                var reader = new FileReader();
+                reader.onload = function(evt) 
+                {
+                    div.innerHTML += '<img src="' + evt.target.result + '" width="200px" height="200px"/>';
+                }
+                reader.readAsDataURL(file.files[0]);
+            } 
+        }
+        </script>
+        <dd><input type="submit" value=发布>
+      </dl>
+    </form>
+    <div id="preview">
+    </div>
+  {% endif %}
+{% endblock %}

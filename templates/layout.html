@@ -1,17 +1,34 @@
 <!doctype html>
-<title>Puppy's blog</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-  <h1>Puppy's blog</h1>
-  <div class=metanav>
-  {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">log in</a>
-  {% else %}
-    <a href="{{ url_for('logout') }}">log out</a>
-  {% endif %}
-  </div>
-  {% for message in get_flashed_messages() %}
-    <div class=flash>{{ message }}</div>
-  {% endfor %}
-  {% block body %}{% endblock %}
-</div>
+<html>
+    <head>
+    <title>Puppy's blog</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static',filename='jquery-3.2.1.min.js')}}"></script>
+    <script src="{{ url_for('static',filename='js.js')}}"></script>
+    </head>
+    <body>
+        <div class="header">
+              <h1 id="title">山高月小，水落石出</h1>
+              <div id="background_music">
+                  <audio autoplay="autoplay" controls="controls" loop="loop" preload="auto"
+                           src="/get/music/background.mp3">
+                  </audio>
+              </div>
+              <div id="nav">
+              <ul>
+               {% if not session.logged_in %}
+                  <li id="login_btn">登录</li>
+                  {% else %}
+                  <li id="login_btn">注销</a></li>
+                  {% endif %}
+                  <li id="microblog">写便签</li>
+                  <li id="blog">写博客</li>
+              <ul/>
+              </div>
+        </div>
+        <div id="header_split"></div>
+        <div class="main">
+            {% block body %}{% endblock %}
+        </div>
+    </body>
+</html>
